@@ -1,11 +1,3 @@
-// defines pins numbers
-#define echo_pin 10
-#define trig_pin 9
-// defines variables
-long duration;
-int distance;
-
-
 #define PWM1 3
 #define PWM2 6
 #define PWM3 7
@@ -19,6 +11,14 @@ int distance;
 #define M3P2 22
 #define M4P1 39
 #define M4P2 38
+
+#define trig_pin_1 -1
+#define echo_pin_1 -1
+
+#define trig_pin_2 -1
+#define echo_pin_2 -1
+
+
 
 int pwm = 100;
 
@@ -56,6 +56,38 @@ class Motor{
     }
 };
 
+class Ultrasonic{
+    int trig_pin;
+    int echo_pin;
+    public:
+        
+        Ultrasonic(int c_trig_pin, int c_echo_pin){
+            trig_pin = c_trig_pin;
+            echo_pin = c_echo_pin;
+        }
+        void setup_ultrasonic(){
+            pinMode(trig_pin, OUTPUT); // Sets the trigPin as an Output
+            pinMode(echo_pin, INPUT); // Sets the echoPin as an Input
+        }
+        
+        int get_distance(){
+            // Clears the trigPin
+            digitalWrite(trig_pin, LOW);
+            delayMicroseconds(2);
+            // Sets the trigPin on HIGH state for 10 micro seconds
+            digitalWrite(trig_pin, HIGH);
+            delayMicroseconds(10);
+            digitalWrite(trig_pin, LOW);
+            // Reads the echoPin, returns the sound wave travel time in microseconds
+            duration = pulseIn(echo_pin, HIGH, 5000);
+            // Calculating the distance
+            int distance= duration*0.034/2;
+            return distance;
+        }
+};
+
+Ultrasonic *u1, *u2;
+
 Motor *motor_1;
 Motor *motor_2;
 Motor *motor_3;
@@ -74,6 +106,9 @@ void setup(){
     motor_2->setup_motor();
     motor_3->setup_motor();
     motor_4->setup_motor();
+    
+    u1 = new Ultrasonic(trig_pin_1, echo_pin_1);
+    u2 = new Ultrasonic(trig_pin_2, echo_pin_2);
 }
 
 void loop(){
