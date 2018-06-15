@@ -38,10 +38,13 @@
 #define trig_pin_3 -1
 #define echo_pin_3 -1
 
+#define setpoint 100
+
 int forward_speed = 100;
 
 int pwm = 100;
 long long int prev_time = 0;
+float fraction_inertia = 12/100;
 
 struct two_parameters{
     int first;
@@ -128,8 +131,39 @@ void setup(){
     u3 = new Ultrasonic(trig_pin_3, echo_pin_3);   
 }
 
-void calculate(){
+int calculate(Ultrasonic *u1, Ultrasonic *u2, int r){
 /*
+
+  \<————d1———>|        ┃                                     |        |        ┃
+   \          |        ┃                                     |        |        ┃
+    \         |        ┃                     --->            |<———————|——d————>┃
+     \        |        ┃                                     |        |        ┃
+      \       |        ┃                                     |        |        ┃
+       \<—d2->|        ┃                                     |        |        ┃
+*/   
+    //For case 1):
+    
+    int d1 = u1->get_distance()-setpoint;
+    int d2 = u2->get_distance()-setpoint;
+    int current_time = millis();
+    int dt = current_time - prev_time;
+    int  s = d1 - d2;
+    int theta = s/r;
+    int v0 = (theta/dt)*(r);
+    
+    //For case 2):
+    int del_d = d2;
+    int v1 = del_d/dt;
+    
+    return v0+v1;
+}
+
+void loop(){
+    int distance_1 = u1->get_distance();
+    int distance_2 = u2->get_distance();
+    int distance_3 = u3->get_distance();
+    
+    /*
 
 
                                      wall to 
@@ -147,15 +181,4 @@ void calculate(){
       Case of variable                                                 
           speeding                                               Same speed for all parallel motors
 */ 
-
-    //For case 1)
-
-}
-
-void loop(){
-    int distance_1 = u1->get_distance();
-    int distance_2 = u2->get_distance();
-    int distance_3 = u3->get_distance();
-    
-    
 }
