@@ -1,3 +1,20 @@
+/* 
+* Assumptions : 
+*      1) Orientation of motors' forward direction is in clockwise direction.
+*                
+*           FOR PLUS CONFIGURATION :: 
+*                ———>
+*             _________
+*            |         |
+*          ^ |         | |
+*          | |         | v
+*            |         |
+*             ‾‾‾‾‾‾‾‾‾
+*               <———
+*           Arrow indicates the direction of motors' forward direction.
+*/
+
+
 #define PWM1 3
 #define PWM2 6
 #define PWM3 7
@@ -18,9 +35,18 @@
 #define trig_pin_2 -1
 #define echo_pin_2 -1
 
+#define trig_pin_3 -1
+#define echo_pin_3 -1
 
+int forward_speed = 100;
 
 int pwm = 100;
+long long int prev_time = 0;
+
+struct two_parameters{
+    int first;
+    int second;
+};
 
 class Motor{
     int pwm;
@@ -81,7 +107,7 @@ class Ultrasonic{
         }
 };
 
-Ultrasonic *u1, *u2;
+Ultrasonic *u1, *u2, *u3;
 
 Motor *motor_1;
 Motor *motor_2;
@@ -99,8 +125,37 @@ void setup(){
     
     u1 = new Ultrasonic(trig_pin_1, echo_pin_1);
     u2 = new Ultrasonic(trig_pin_2, echo_pin_2);
+    u3 = new Ultrasonic(trig_pin_3, echo_pin_3);   
+}
+
+void calculate(){
+/*
+
+
+                                     wall to 
+                          setpoint    follow                                           setpoint   wall to 
+           /\<———————d1——————>|        ┃                            ________________              follow
+         /    \               |        ┃                           |              u1|<—d1—>|        ┃
+       /        \<—————d2————>|        ┃                           |                |      |        ┃
+     /            \           |        ┃     Transformed to        |                |      |        ┃
+   /                \<———d3——>|        ┃       ------->            |                |      |        ┃
+   \                /         |        ┃                           |              u2|<—d2—>|        ┃
+     \            /           |        ┃                           |                |      |        ┃
+       \        /             |        ┃                           |                |      |        ┃
+         \    /               |        ┃                           |              u3|<—d3—>|        ┃
+           \/                 |        ┃                            ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+      Case of variable                                                 
+          speeding                                               Same speed for all parallel motors
+*/ 
+
+    //For case 1)
+
 }
 
 void loop(){
-    delay(1000);  
+    int distance_1 = u1->get_distance();
+    int distance_2 = u2->get_distance();
+    int distance_3 = u3->get_distance();
+    
+    
 }
