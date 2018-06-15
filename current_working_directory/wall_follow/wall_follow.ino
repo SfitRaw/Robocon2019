@@ -79,7 +79,7 @@ class Ultrasonic{
             delayMicroseconds(10);
             digitalWrite(trig_pin, LOW);
             // Reads the echoPin, returns the sound wave travel time in microseconds
-            duration = pulseIn(echo_pin, HIGH, 5000);
+            long int duration = pulseIn(echo_pin, HIGH, 5000);
             // Calculating the distance
             int distance= duration*0.034/2;
             return distance;
@@ -112,5 +112,5 @@ void setup(){
 }
 
 void loop(){
-    delay()  
+    delay(1000);  
 }
