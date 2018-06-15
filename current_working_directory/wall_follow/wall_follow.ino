@@ -31,9 +31,6 @@ class Motor{
         pole_1 = c_pole_1;
         pole_2 = c_pole_2;
         c_pwm = pwm;
-    }
-    
-    void setup_motor(){
         pinMode(pole_1, OUTPUT);
         pinMode(pole_2, OUTPUT);
         pinMode(pwm, OUTPUT);
@@ -64,8 +61,6 @@ class Ultrasonic{
         Ultrasonic(int c_trig_pin, int c_echo_pin){
             trig_pin = c_trig_pin;
             echo_pin = c_echo_pin;
-        }
-        void setup_ultrasonic(){
             pinMode(trig_pin, OUTPUT); // Sets the trigPin as an Output
             pinMode(echo_pin, INPUT); // Sets the echoPin as an Input
         }
@@ -101,11 +96,6 @@ void setup(){
     motor_2 = new Motor(M2P1, M2P2, PWM2);
     motor_3 = new Motor(M3P1, M3P2, PWM3);
     motor_4 = new Motor(M4P1, M4P2, PWM4);
-    
-    motor_1->setup_motor();
-    motor_2->setup_motor();
-    motor_3->setup_motor();
-    motor_4->setup_motor();
     
     u1 = new Ultrasonic(trig_pin_1, echo_pin_1);
     u2 = new Ultrasonic(trig_pin_2, echo_pin_2);
